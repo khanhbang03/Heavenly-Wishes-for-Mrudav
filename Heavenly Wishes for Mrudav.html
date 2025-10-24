@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heavenly Wishes for Mrudav</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    background: linear-gradient(to bottom, #87cefa, #ffffff);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: #333;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    margin: 0.2em;
+    color: #ff69b4;
+    text-shadow: 2px 2px 5px #fff;
+  }
+
+  p {
+    font-size: 1.2em;
+    margin: 0.5em 0;
+    color: #555;
+  }
+
+  .cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: floatClouds linear infinite;
+  }
+
+  @keyframes floatClouds {
+    0% { transform: translateX(-200px); }
+    100% { transform: translateX(100vw); }
+  }
+</style>
+</head>
+<body>
+<h1>Wishing Mrudav a life full of peace, joy, and heavenly happiness!</h1>
+<p>May every day feel like paradise 🌸☀️</p>
+
+<script>
+function createCloud() {
+  const cloud = document.createElement('div');
+  cloud.className = 'cloud';
+  const size = Math.random() * 100 + 50; // 50-150px
+  cloud.style.width = size + 'px';
+  cloud.style.height = size * 0.6 + 'px';
+  cloud.style.top = Math.random() * window.innerHeight * 0.6 + 'px';
+  cloud.style.left = '-200px';
+  cloud.style.animationDuration = Math.random() * 20 + 20 + 's';
+  document.body.appendChild(cloud);
+
+  setTimeout(() => {
+    cloud.remove();
+  }, parseFloat(cloud.style.animationDuration) * 1000);
+}
+
+// Tạo liên tục các đám mây
+setInterval(createCloud, 2000);
+</script>
+</body>
+</html>

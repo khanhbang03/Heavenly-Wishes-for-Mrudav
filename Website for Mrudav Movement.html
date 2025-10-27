@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Whole World Is Heading Towards Mrudav</title>
+  <meta name="description" content="A playful site: 'The whole world is heading towards Mrudav' — animated globe, call-to-action, and responsive layout."/>
+  <style>
+    /* Reset + base */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(ellipse at top left, #07102b 0%, #01020a 50%, #000000 100%);
+      color:#eef6ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+      line-height:1.45;
+    }
+
+    /* Container */
+    .wrap{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:48px 20px;
+      position:relative;
+    }
+
+    /* Starfield */
+    .stars, .stars::after {
+      position:absolute;
+      inset:0;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.0) 40%),
+        radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.0) 40%),
+        radial-gradient(1.5px 1.5px at 50% 40%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.0) 40%);
+      background-size: 200px 200px, 280px 280px, 180px 180px;
+      opacity:.25;
+      pointer-events:none;
+      z-index:0;
+      animation: drift 60s linear infinite;
+      mix-blend-mode:screen;
+    }
+    .stars::after{
+      content:"";
+      opacity:.18;
+      animation: drift 95s linear reverse infinite;
+      transform:translateZ(0);
+      filter:blur(0.6px);
+    }
+    @keyframes drift{
+      from{transform:translateY(0) rotate(0deg)}
+      to{transform:translateY(-200px) rotate(360deg)}
+    }
+
+    /* Hero content */
+    .hero{
+      max-width:1100px;
+      width:100%;
+      display:grid;
+      grid-template-columns: 1fr 460px;
+      gap:32px;
+      align-items:center;
+      z-index:1;
+    }
+
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr; text-align:center}
+    }
+
+    .copy{
+      padding:18px 12px;
+    }
+    .eyebrow{
+      display:inline-block;
+      background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      color:#cfe9ff;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:13px;
+      letter-spacing:0.6px;
+      margin-bottom:14px;
+    }
+    h1{
+      margin:0 0 14px 0;
+      font-size: clamp(28px, 4.2vw, 48px);
+      line-height:1.02;
+      color: #ffffff;
+      text-shadow: 0 6px 24px rgba(0,0,0,0.6);
+    }
+    p.lead{
+      margin:0 0 22px 0;
+      color: #d8eefc;
+      font-size:16px;
+      max-width:55ch;
+      opacity:0.95;
+    }
+
+    .cta-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-start;
+    }
+    @media (max-width:900px){
+      .cta-row{justify-content:center}
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      background:linear-gradient(90deg,#5bd2ff 0%, #6a8cff 100%);
+      color:#02122a;
+      font-weight:700;
+      padding:12px 18px;
+      border-radius:12px;
+      border:0;
+      cursor:pointer;
+      box-shadow:0 8px 30px rgba(106,140,255,0.18);
+      transition:transform .18s ease, box-shadow .18s ease;
+      text-decoration:none;
+      font-size:15px;
+    }
+    .btn:active{transform:translateY(2px)}
+    .btn.ghost{
+      background:transparent;
+      color:#cfe9ff;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow:none;
+      font-weight:600;
+    }
+
+    /* Globe card */
+    .globe-wrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      perspective:1200px;
+      filter:drop-shadow(0 18px 60px rgba(0,0,0,0.7));
+    }
+
+    .globe{
+      width:420px;
+      height:420px;
+      border-radius:50%;
+      position:relative;
+      transform-style:preserve-3d;
+      background:conic-gradient(from 120deg, rgba(78,95,255,0.18), rgba(59,214,255,0.12));
+      overflow:visible;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Simple stylized "globe" using SVG layers */
+    .globe svg{
+      display:block;
+      width:90%;
+      height:90%;
+      transform:rotateX(15deg) rotateY(-8deg);
+      animation: slow-spin 18s linear infinite;
+    }
+    @keyframes slow-spin{
+      from{transform:rotateX(15deg) rotateY(-8deg) rotateZ(0deg)}
+      to{transform:rotateX(15deg) rotateY(-8deg) rotateZ(360deg)}
+    }
+
+    /* Orbiting markers */
+    .orbiter{
+      position:absolute;
+      width:8px;
+      height:8px;
+      background:linear-gradient(90deg,#ffd76b,#ff7ba5);
+      border-radius:50%;
+      box-shadow:0 6px 18px rgba(255,123,165,.28);
+      transform-origin:210px 210px;
+      animation: orbit 9s linear infinite;
+      z-index:2;
+    }
+    .orbiter:nth-child(1){animation-duration:9s; top:18px; left:210px}
+    .orbiter:nth-child(2){animation-duration:11s; top:210px; left:390px}
+    .orbiter:nth-child(3){animation-duration:14s; top:390px; left:210px}
+    .orbiter:nth-child(4){animation-duration:12s; top:210px; left:30px}
+    @keyframes orbit{
+      from{transform:rotate(0deg) translateX(0) translateY(0)}
+      to{transform:rotate(360deg) translateX(0) translateY(0)}
+    }
+
+    /* Footer / info */
+    .info{
+      margin-top:28px;
+      width:100%;
+      text-align:center;
+      color:#bfe8ff;
+      opacity:0.88;
+      font-size:13px;
+    }
+
+    /* small responsive touches */
+    @media (max-width:520px){
+      .globe{width:320px;height:320px}
+      .hero{gap:18px}
+      .copy{padding:6px}
+    }
+
+    /* subtle pulse for the world CTA */
+    .pulse {
+      position:relative;
+    }
+    .pulse::after{
+      content:'';
+      position:absolute;
+      inset:-6px;
+      border-radius:14px;
+      background:linear-gradient(90deg, rgba(91,210,255,0.08), rgba(106,140,255,0.06));
+      z-index:-1;
+      animation: pulse 2.6s infinite;
+    }
+    @keyframes pulse{
+      0%{opacity:0.6; transform:scale(1)}
+      50%{opacity:0.12; transform:scale(1.06)}
+      100%{opacity:0.6; transform:scale(1)}
+    }
+
+    /* accessibility focus */
+    .btn:focus{outline:3px solid rgba(91,210,255,0.18); outline-offset:3px}
+
+    /* small card for stats */
+    .card{
+      margin-top:18px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .stat{
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      padding:10px 12px;
+      border-radius:10px;
+      font-weight:700;
+      font-size:13px;
+      color:#dff6ff;
+      border:1px solid rgba(255,255,255,0.03);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main">
+    <div class="stars" aria-hidden="true"></div>
+
+    <header class="hero" aria-label="Main hero">
+      <div class="copy">
+        <span class="eyebrow" aria-hidden="true">Now trending</span>
+        <h1>The whole world is heading towards <span style="color:#ffd76b">Mrudav</span></h1>
+        <p class="lead">A movement, a myth, a person — call it what you want. This page celebrates the slow, friendly gravitational pull drawing the world (and its oddities) toward Mrudav. Join the orbit: share, explore, and add your own marker on the map of curiosity.</p>
+
+        <div class="cta-row" role="group" aria-label="Calls to action">
+          <a class="btn pulse" id="joinBtn" href="#" role="button" aria-pressed="false">Join the Orbit</a>
+          <button class="btn ghost" id="aboutBtn">Why Mrudav?</button>
+        </div>
+
+        <div class="card" aria-hidden="false">
+          <div class="stat">🌍 Worldwide: <strong id="stat-world">142</strong> markers</div>
+          <div class="stat">🚀 Active now: <strong id="stat-now">12</strong></div>
+          <div class="stat">💬 Stories: <strong id="stat-stories">61</strong></div>
+        </div>
+      </div>
+
+      <div class="globe-wrap" aria-hidden="false">
+        <div class="globe" role="img" aria-label="Animated globe showing the world heading to Mrudav">
+          <!-- Inline SVG globe: continents are stylized, not geographically exact. -->
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="ocean" cx="30%" cy="30%">
+                <stop offset="0%" stop-color="#08223a" />
+                <stop offset="100%" stop-color="#021326" />
+              </radialGradient>
+              <linearGradient id="land" x1="0" x2="1">
+                <stop offset="0" stop-color="#70ffd8"/>
+                <stop offset="1" stop-color="#7bd6ff"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="6" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Ocean -->
+            <circle cx="256" cy="256" r="230" fill="url(#ocean)"/>
+
+            <!-- Stylized continents / shapes -->
+            <path d="M120 170c24-10 60-6 90 6s68 38 92 38 56-12 76-6 44 36 36 62-38 54-74 64-86 16-116 6-64-34-86-62-36-70-34-108 14-44 16-0z" fill="url(#land)" opacity=".95" filter="url(#glow)"/>
+            <path d="M350 270c22 6 46 20 58 36s10 44-6 64-42 34-78 34-64-10-92-28-56-36-70-60-16-46 10-66 68-30 100-20 64 34 78 40z" fill="url(#land)" opacity=".9"/>
+
+            <!-- Latitude lines -->
+            <g stroke="rgba(255,255,255,0.06)" stroke-width="1">
+              <ellipse cx="256" cy="256" rx="200" ry="46" fill="none"/>
+              <ellipse cx="256" cy="256" rx="160" ry="36" fill="none"/>
+              <ellipse cx="256" cy="256" rx="120" ry="26" fill="none"/>
+            </g>
+
+            <!-- Central glow/spot for 'Mrudav' destination -->
+            <circle cx="256" cy="256" r="18" fill="#ffd76b" opacity="0.96" />
+            <circle cx="256" cy="256" r="6" fill="#ff7b9a" opacity="0.98" />
+            <g transform="translate(256,256)">
+              <text x="0" y="80" text-anchor="middle" font-size="12" fill="#cfe9ff" opacity=".65">Mrudav</text>
+            </g>
+          </svg>
+
+          <!-- orbiting decorative dots -->
+          <div class="orbiter" style="transform-origin:210px 210px;"></div>
+          <div class="orbiter" style="transform-origin:210px 210px;"></div>
+          <div class="orbiter" style="transform-origin:210px 210px;"></div>
+          <div class="orbiter" style="transform-origin:210px 210px;"></div>
+        </div>
+      </div>
+    </header>
+
+    <section style="max-width:880px; margin-top:28px; text-align:center; z-index:1;">
+      <p style="color:#bfeaff; opacity:.9; font-size:14px; margin:0 18px 16px 18px;">
+        Want your name on the map? Click <strong>Join the Orbit</strong>, pick a marker color, and add a short message. This demo stores everything in-memory — refresh clears it. Use the code as a starting point to connect a backend and persist your global movement.
+      </p>
+    </section>
+
+    <div class="info" aria-hidden="false">
+      Built with ▪︎ SVG ▪︎ HTML ▪︎ CSS ▪︎ Tiny JS — made for Mrudav
+    </div>
+  </div>
+
+  <script>
+    // Small client-side interactivity (no backend)
+    (function () {
+      const joinBtn = document.getElementById('joinBtn');
+      const aboutBtn = document.getElementById('aboutBtn');
+      const statWorld = document.getElementById('stat-world');
+      const statNow = document.getElementById('stat-now');
+      const statStories = document.getElementById('stat-stories');
+
+      // simple in-memory counts
+      let worldCount = 142;
+      let nowCount = 12;
+      let stories = 61;
+
+      function updateStats() {
+        statWorld.textContent = worldCount;
+        statNow.textContent = nowCount;
+        statStories.textContent = stories;
+      }
+      updateStats();
+
+      joinBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const name = prompt("Add your name to the Orbit (short):", "A curious traveler");
+        if (!name) return;
+        const color = prompt("Pick a color for your marker (e.g. red, #ffcc00):", "#ff7ba5");
+        // increment visible counters
+        worldCount += 1;
+        nowCount += 1;
+        stories += 1;
+        updateStats();
+
+        // temporary visual marker: create a small dot and animate to globe center
+        const dot = document.createElement('div');
+        dot.style.width = '12px';
+        dot.style.height = '12px';
+        dot.style.borderRadius = '50%';
+        dot.style.position = 'fixed';
+        dot.style.zIndex = 9999;
+        dot.style.left = (Math.random()*80 + 10) + 'vw';
+        dot.style.top = (Math.random()*60 + 20) + 'vh';
+        dot.style.background = color;
+        dot.style.boxShadow = '0 8px 20px rgba(0,0,0,0.4)';
+        dot.style.transition = 'transform 1.5s cubic-bezier(.2,.9,.2,1), opacity 1.3s';
+        document.body.appendChild(dot);
+
+        // compute globe center in viewport
+        const globe = document.querySelector('.globe');
+        const rect = globe.getBoundingClientRect();
+        const centerX = rect.left + rect.width/2;
+        const centerY = rect.top + rect.height/2;
+
+        requestAnimationFrame(() => {
+          dot.style.transform = `translate(${centerX - (parseFloat(dot.style.left) + 6)}px, ${centerY - (parseFloat(dot.style.top) + 6)}px) scale(.6)`;
+          dot.style.opacity = '0.0';
+        });
+
+        setTimeout(() => dot.remove(), 1700);
+
+        alert(`Thanks ${name}! You've joined the orbit.`)
+      });
+
+      aboutBtn.addEventListener('click', function () {
+        // Non-blocking info modal — using alert for simplicity since no heavy UI requested
+        alert("Mrudav: a destination, a person, a playful idea. This prototype shows an animated globe and lets people add temporary markers. To persist markers, connect this UI to a server (POST /markers) and fetch them on load.");
+      });
+
+      // fun tiny animation that randomly pulses nowCount to simulate "active people"
+      setInterval(() => {
+        nowCount = Math.max(3, Math.round(12 + Math.sin(Date.now()/4000)*4 + Math.random()*3));
+        updateStats();
+      }, 2200);
+
+      // keyboard accessibility: Enter on focused Join
+      joinBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter') joinBtn.click(); });
+
+    })();
+  </script>
+</body>
+</html>
